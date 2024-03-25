@@ -23,7 +23,7 @@ export default definePlugin({
             // if `multiple` is defined, it's probably a group call
             dialog.show({
                 title: multiple ? `Start a group ${action}?` : `Start a ${action} with ${username}?`,
-                body: multiple ? "Are you sure you want to start the group call?" : `Are you sure you want to ${action} **${username}**?`,
+                body: multiple ? "Are you sure you want to start the group call?" : `Are you sure you want to **${action} with ${username}**?`,
                 confirmText: "Yes",
                 cancelText: "Cancel",
                 confirmColor: "brand",
