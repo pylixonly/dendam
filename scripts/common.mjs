@@ -15,21 +15,30 @@ const timeFormatter = new Intl.DateTimeFormat(undefined, {
 const swcPlugin = {
     name: "swc",
     setup(build) {
-        build.onLoad({ filter: /\.[jt]sx?$/ }, async args => {
+        build.onLoad({ filter: /\.[cm]?[jt]sx?$/ }, async args => {
             const result = await swc.transformFile(args.path, {
                 jsc: {
                     externalHelpers: true,
                 },
+                // https://github.com/facebook/hermes/blob/3815fec63d1a6667ca3195160d6e12fee6a0d8d5/doc/Features.md
+                // https://github.com/facebook/hermes/issues/696#issuecomment-1396235791
                 env: {
-                    targets: "defaults",
+                    targets: "fully supports es6",
                     include: [
-                        "transform-classes",
+                        // Pretend that arrow functions are unsupported, since hermes does not support async arrow functions for some reason
                         "transform-arrow-functions",
                         "transform-block-scoping",
-                        "transform-class-properties"
+                        "transform-classes"
                     ],
                     exclude: [
-                        "transform-parameters"
+                        "transform-parameters",
+                        "transform-template-literals",
+                        "transform-async-to-generator",
+                        "transform-exponentiation-operator",
+                        "transform-named-capturing-groups-regex",
+                        "transform-nullish-coalescing-operator",
+                        "transform-object-rest-spread",
+                        "transform-optional-chaining"
                     ]
                 },
             });
@@ -98,7 +107,7 @@ export async function makePluginBuildContext(name, prod, log, repo = false) {
             pluginGlobals({
                 "react": "React",
                 "react-native": "ReactNative",
-                "@pyoncord.*": (moduleName) => {
+                "@bunny.*": (moduleName) => {
                     return moduleName.slice(1).replace(/\//g, ".");
                 },
             }),
@@ -111,15 +120,14 @@ export async function makePluginBuildContext(name, prod, log, repo = false) {
 export async function buildRepo(prod = true) {
     const repo = {};
 
-    for (const name of await readdir("./dist/plugins")) {
-        if (!(await lstat(`./dist/plugins/${name}`)).isDirectory()) continue;
+    for (const id of await readdir("./dist/plugins")) {
+        if (!(await lstat(`./dist/plugins/${id}`)).isDirectory()) continue;
 
-        const manifest = JSON.parse(await readFile(`./dist/plugins/${name}/manifest.json`));
+        const manifest = JSON.parse(await readFile(`./dist/plugins/${id}/manifest.json`));
 
         if (!prod) manifest.version += "-dev";
 
-        repo[name] = {
-            name: manifest.name,
+        repo[id] = {
             version: manifest.version,
             alwaysFetch: !prod
         };

@@ -1,2 +1,2 @@
-# Pyoncord Plugins Template
-This repo contains a template for creating [Pyoncord](https://github.com/pyoncord/pyoncord) plugins.
+# Bunny Plugins Template
+This repo contains a template for creating [Bunny](https://github.com/pyoncord/Bunny) plugins.

@@ -16,7 +16,7 @@ jobs:
             - name: Prepare environment
               uses: actions/setup-node@v3
               with:
-                  node-version: "20"
+                  node-version: 20
 
             - run: npm install --global pnpm
 
@@ -24,7 +24,7 @@ jobs:
               run: pnpm m i
 
             - name: Build plugin(s)
-              run: node ./build.mjs
+              run: pnpm run buildAll
 
               # Foolproof feature:
               # - Copies over README so that the root of the deployed website shows it

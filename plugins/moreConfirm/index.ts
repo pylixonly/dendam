@@ -1,6 +1,6 @@
-import { patcher } from "@pyoncord/api";
-import { findByProps } from "@pyoncord/metro/filters";
-import { createStorage, logger } from "@pyoncord/plugin";
+import { patcher } from "@bunny/api";
+import { findByProps } from "@bunny/metro";
+import { createStorage, logger } from "@bunny/plugin";
 
 interface Storage {
     confirmCalls: boolean;
