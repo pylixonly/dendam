@@ -8,5 +8,5 @@
         "jsx": "react-native",
         "allowJs": true
     },
-    "include": ["plugins", "node_modules/pyoncord-types/*.d.ts"]
+    "include": ["plugins", "node_modules/bn-types/*.d.ts"]
 }

@@ -1,12 +1,13 @@
 import { patcher } from "@bunny/api";
 import { findByProps } from "@bunny/metro";
-import { createStorage, logger } from "@bunny/plugin";
+
+const { createStorage, logger } = bunny.plugin; // hack: bunny.plugin isn't moduled
 
 interface Storage {
     confirmCalls: boolean;
 }
 
-export const storage = createStorage<Storage>();
+const storage = createStorage<Storage>() as unknown as Storage; // hack: bunny wong types
 storage.confirmCalls ??= true;
 
 const callManager = findByProps("handleStartCall");

@@ -84,8 +84,8 @@ export async function makePluginBuildContext(name, prod, log, repo = false) {
 
     delete manifest.main;
 
-    await mkdir(`./dist/plugins/${name}`, { recursive: true });
-    await writeFile(`./dist/plugins/${name}/manifest.json`, JSON.stringify(manifest));
+    await mkdir(`./dist/plugins/${manifest.id}`, { recursive: true });
+    await writeFile(`./dist/plugins/${manifest.id}/manifest.json`, JSON.stringify(manifest));
 
     return await esbuild.context({
         entryPoints: [entryPoint],
@@ -99,7 +99,7 @@ export async function makePluginBuildContext(name, prod, log, repo = false) {
             "const-and-let": false
         },
         globalName: "plugin",
-        outfile: `dist/plugins/${name}/index.js`,
+        outfile: `dist/plugins/${manifest.id}/index.js`,
         keepNames: true,
         legalComments: "none",
         plugins: [
@@ -111,7 +111,7 @@ export async function makePluginBuildContext(name, prod, log, repo = false) {
                     return moduleName.slice(1).replace(/\//g, ".");
                 },
             }),
-            log && buildLog(name),
+            log && buildLog(manifest.id),
             repo && repoBuilder(prod)
         ].filter(Boolean)
     });

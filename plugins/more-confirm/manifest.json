@@ -1,4 +1,5 @@
 {
+    "id": "pylix.moreconfirm",
     "name": "More Confirm",
     "description": "Stop embarassing yourself with more action confirmations!",
     "version": "1.0.1",
