@@ -45,28 +45,20 @@ var plugin = (() => {
     }
   });
 
-  // globals:@bunny/plugin
-  var require_plugin = __commonJS({
-    "globals:@bunny/plugin"(exports, module) {
-      module.exports = bunny.plugin;
-    }
-  });
-
-  // plugins/moreConfirm/index.ts
-  var moreConfirm_exports = {};
-  __export(moreConfirm_exports, {
-    default: () => moreConfirm_default,
-    storage: () => storage
+  // plugins/more-confirm/index.ts
+  var more_confirm_exports = {};
+  __export(more_confirm_exports, {
+    default: () => more_confirm_default
   });
   var import_api = __toESM(require_api());
   var import_metro = __toESM(require_metro());
-  var import_plugin = __toESM(require_plugin());
   var _storage;
-  var storage = (0, import_plugin.createStorage)();
+  var { createStorage, logger } = bunny.plugin;
+  var storage = createStorage();
   (_storage = storage).confirmCalls ?? (_storage.confirmCalls = true);
   var callManager = (0, import_metro.findByProps)("handleStartCall");
   var dialog = (0, import_metro.findByProps)("show", "confirm", "close");
-  var moreConfirm_default = definePlugin({
+  var more_confirm_default = definePlugin({
     start() {
       import_api.patcher.instead("handleStartCall", callManager, function(args, orig) {
         if (!storage.confirmCalls)
@@ -83,12 +75,12 @@ var plugin = (() => {
             try {
               orig(...args);
             } catch (e) {
-              import_plugin.logger.error("Failed to start call", e);
+              logger.error("Failed to start call", e);
             }
           }
         });
       });
     }
   });
-  return __toCommonJS(moreConfirm_exports);
+  return __toCommonJS(more_confirm_exports);
 })();
